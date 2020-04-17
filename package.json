@@ -1,0 +1,21 @@
+{
+  "name": "@prism-3d/eyeblink",
+  "version": "1.0.0",
+  "author": "Yasuaki Uechi <y@uechi.io> (https://uechi.io/)",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@tensorflow-models/facemesh": "^0.0.1",
+    "@tensorflow/tfjs": "^1.7.2",
+    "@tensorflow/tfjs-node": "^1.7.2"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "main": "lib/index.js",
+  "license": "MIT",
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
+}
