@@ -1,0 +1,23 @@
+{
+  "name": "eyeblink-detection-demo",
+  "version": "0.0.0",
+  "author": "Yasuaki Uechi <y@uechi.io> (https://uechi.io/)",
+  "scripts": {
+    "start": "run-p watch:*",
+    "watch:js": "parcel watch index.ts -o bundle.js",
+    "watch:static": "serve .."
+  },
+  "dependencies": {
+    "@prism-3d/eyeblink": "file:.."
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.12.4",
+    "serve": "^11.3.0"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
+}
