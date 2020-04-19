@@ -7,6 +7,11 @@ export interface BoundingBox {
   bottomRight: readonly [number, number];
 }
 
+export interface EyeblinkPrediction {
+  right: number;
+  left: number;
+}
+
 export class Eyeblink {
   private eyeblinkModel: tf.GraphModel;
   private facemeshModel: FaceMesh;
@@ -63,9 +68,11 @@ export class Eyeblink {
     return prediction[0];
   }
 
-  async predictEyeOpenness(image: ImageData) {
+  async predictEyeOpenness(
+    image: ImageData,
+  ): Promise<EyeblinkPrediction | null> {
     const facePredictions = await this.facemeshModel.estimateFaces(image);
-    if (facePredictions.length === 0) return;
+    if (facePredictions.length === 0) return null;
     const face = facePredictions[0];
     const imageTensor = tf.browser.fromPixels(image);
 

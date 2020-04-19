@@ -1,7 +1,8 @@
-/lib
-
 # Created by https://www.gitignore.io/api/node
 # Edit at https://www.gitignore.io/?templates=node
+
+# rollup.js default build output
+# dist/
 
 ### Node ###
 # Logs
@@ -80,9 +81,6 @@ typings/
 
 # nuxt.js build output
 .nuxt
-
-# rollup.js default build output
-dist/
 
 # Uncomment the public line if your project uses Gatsby
 # https://nextjs.org/blog/next-9-1#public-directory-support

@@ -1,11 +1,11 @@
-# Eye Blink Detector
+# Eyeblink
 
-The eye blink detector that consumes a cropped image of eyes and predicts the eye openness. The original model is derived from [Taehee Lee's Eye Blink Detector](https://github.com/kairess/eye_blink_detector).
+Eyeblink is an eye-blink tracking model that consumes a cropped image of eyes and predicts the eye openness. The original model is [Taehee Lee's Eye Blink Detector](https://github.com/kairess/eye_blink_detector).
 
 ## Usage
 
 ```
-yarn add @prism-3d/eyeblink
+yarn add https://github.com/prism-3d/eyeblink
 ```
 
 ### Multi-architecture support
