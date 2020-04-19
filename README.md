@@ -28,7 +28,7 @@ const model = await eyeblinkModel.load('path/to/tfjs-model');
 Load tf.js Model from URL and use Tensorflow.js to predict.
 
 ```js
-import * as eyeblinkModel from '@prism-3d/eyeblink/browser';
+import * as eyeblinkModel from '@prism-3d/eyeblink/dist/browser';
 const model = await eyeblinkModel.load('https://path/to/tfjs-model');
 ```
 
