@@ -18,6 +18,8 @@ yarn add https://github.com/prism-3d/eyeblink
 
 Load tf.js Model from file-system and use Tensorflow C binary to predict.
 
+> Run `yarn add @tensorflow/tfjs-node`
+
 ```js
 import * as eyeblinkModel from '@prism-3d/eyeblink';
 const model = await eyeblinkModel.load('path/to/tfjs-model');
@@ -26,6 +28,8 @@ const model = await eyeblinkModel.load('path/to/tfjs-model');
 #### Browser
 
 Load tf.js Model from URL and use Tensorflow.js to predict.
+
+> Run `yarn add @tensorflow/tfjs`
 
 ```js
 import * as eyeblinkModel from '@prism-3d/eyeblink/dist/browser';
