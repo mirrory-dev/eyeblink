@@ -1,7 +1,7 @@
 import node from '@rollup/plugin-node-resolve';
-import typescript from 'rollup-plugin-typescript2';
 import {terser} from 'rollup-plugin-terser';
 import nodeBuiltins from 'rollup-plugin-node-builtins';
+import ts from '@wessberg/rollup-plugin-ts';
 
 const PREAMBLE = `/**
     * @license
@@ -28,7 +28,9 @@ function config({input, plugins = [], output = {}}) {
   return {
     input,
     plugins: [
-      typescript({tsconfigOverride: {compilerOptions: {module: 'ES2015'}}}),
+      ts({
+        tsconfig: (resolvedConfig) => ({...resolvedConfig, module: 'ES2015'}),
+      }),
       node(),
       nodeBuiltins(),
       ...plugins,
@@ -36,27 +38,28 @@ function config({input, plugins = [], output = {}}) {
     output: {
       banner: PREAMBLE,
       globals: {
-        '@tensorflow/tfjs-core': 'tf',
+        '@tensorflow/tfjs': 'tf',
+        '@tensorflow/tfjs-core': 'tfjsCore',
         '@tensorflow/tfjs-converter': 'tf',
       },
       ...output,
     },
-    external: ['@tensorflow/tfjs-core', '@tensorflow/tfjs-converter'],
+    external: [
+      '@tensorflow/tfjs',
+      '@tensorflow/tfjs-core',
+      '@tensorflow/tfjs-converter',
+    ],
   };
 }
 
 export default [
   config({
-    input: 'src/node.ts',
-    output: {format: 'cjs', name: 'eyeblink', file: 'dist/node/eyeblink.js'},
+    input: 'src/browser.ts',
+    output: {format: 'umd', name: 'eyeblink', file: 'dist/umd/bundle.js'},
   }),
   config({
-    input: 'src/index.ts',
-    output: {format: 'umd', name: 'eyeblink', file: 'dist/eyeblink.js'},
-  }),
-  config({
-    input: 'src/index.ts',
+    input: 'src/browser.ts',
     plugins: [minify()],
-    output: {format: 'umd', name: 'eyeblink', file: 'dist/eyeblink.min.js'},
+    output: {format: 'umd', name: 'eyeblink', file: 'dist/umd/bundle.min.js'},
   }),
 ];

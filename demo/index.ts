@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import * as blinkModel from '@prism-3d/eyeblink/lib/browser';
+import * as blinkModel from '@prism-3d/eyeblink/dist/umd/bundle';
 
 let predictor: any;
 let webcam;
@@ -52,7 +52,7 @@ async function animate() {
 }
 
 async function init() {
-  predictor = await blinkModel.load();
+  predictor = await blinkModel.load('models/model.json');
   webcam = await tf.data.webcam(webcamEl);
   animate();
 }
