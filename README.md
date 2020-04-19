@@ -1,6 +1,10 @@
 # Eyeblink
 
-Eyeblink is an eye-blink tracking model that consumes a cropped image of eyes and predicts the eye openness. The original model is [Taehee Lee's Eye Blink Detector](https://github.com/kairess/eye_blink_detector).
+Eyeblink is an eye-blink tracking model that consumes a cropped image of eyes and predicts the eye openness.
+
+Demo: <https://prism-3d.github.io/eyeblink/>
+
+The original model is [Taehee Lee's Eye Blink Detector](https://github.com/kairess/eye_blink_detector).
 
 ## Usage
 
@@ -24,13 +28,16 @@ const model = await eyeblinkModel.load('path/to/tfjs-model');
 Load tf.js Model from URL and use Tensorflow.js to predict.
 
 ```js
-import * as eyeblinkModel from '@prism-3d/eyeblink/lib/browser';
+import * as eyeblinkModel from '@prism-3d/eyeblink/browser';
 const model = await eyeblinkModel.load('https://path/to/tfjs-model');
 ```
 
-## Demo
+## Dev
 
 ```
+yarn install
+yarn bootstrap
+yarn link
 cd demo
 yarn install
 yarn start
