@@ -1,15 +1,22 @@
-import * as tf from '@tensorflow/tfjs-node';
-import * as facemesh from '@tensorflow-models/facemesh';
-import * as path from 'path';
+import {loadGraphModel} from '@tensorflow/tfjs-converter';
+import {load as loadFaceMeshModel} from '@tensorflow-models/facemesh';
+import {io} from '@tensorflow/tfjs';
+import {resolve} from 'path';
 
 import {Eyeblink} from './eyeblink';
 
-const defaultGraphModelPath = path.resolve(__dirname, '../models/model.json');
+const defaultGraphModelPath = resolve(__dirname, '../models/model.json');
 
-export async function load(graphModelPath: string = defaultGraphModelPath) {
-  const blinkModel = await tf.loadGraphModel(
-    'file://' + path.resolve(graphModelPath),
-  );
-  const facemeshModel = await facemesh.load({maxFaces: 1});
+export async function loadModel(
+  graphModelPath: string | io.IOHandler = defaultGraphModelPath,
+) {
+  return loadGraphModel(graphModelPath);
+}
+
+export async function load(
+  graphModelPath: string | io.IOHandler = defaultGraphModelPath,
+) {
+  const blinkModel = await loadModel(graphModelPath);
+  const facemeshModel = await loadFaceMeshModel({maxFaces: 1});
   return new Eyeblink(blinkModel, facemeshModel);
 }

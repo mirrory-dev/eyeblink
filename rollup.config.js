@@ -55,11 +55,11 @@ function config({input, plugins = [], output = {}}) {
 export default [
   config({
     input: 'src/browser.ts',
-    output: {format: 'umd', name: 'eyeblink', file: 'dist/umd/bundle.js'},
+    output: {format: 'umd', name: 'eyeblink', file: 'dist/umd/eyeblink.js'},
   }),
   config({
     input: 'src/browser.ts',
     plugins: [minify()],
-    output: {format: 'umd', name: 'eyeblink', file: 'dist/umd/bundle.min.js'},
+    output: {format: 'umd', name: 'eyeblink', file: 'dist/umd/eyeblink.min.js'},
   }),
 ];

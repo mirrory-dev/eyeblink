@@ -1,8 +1,9 @@
 import * as tf from '@tensorflow/tfjs';
-import * as blinkModel from '@prism-3d/eyeblink/dist/umd/bundle';
+import * as blinkModel from '@prism-3d/eyeblink/dist/umd/eyeblink';
+import {Eyeblink} from '@prism-3d/eyeblink/dist/umd/eyeblink';
 
-let predictor: any;
-let webcam;
+let predictor: Eyeblink;
+let webcam: any;
 
 const rightEyeEl = document.querySelector('#rightEye')! as HTMLDivElement;
 const leftEyeEl = document.querySelector('#leftEye')! as HTMLDivElement;

@@ -1,12 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tf = require("@tensorflow/tfjs-converter");
-const facemesh = require("@tensorflow-models/facemesh");
+const tfjs_converter_1 = require("@tensorflow/tfjs-converter");
+const facemesh_1 = require("@tensorflow-models/facemesh");
 const eyeblink_1 = require("./eyeblink");
-const defaultGraphModelPath = 'https://unpkg.com/@prism-3d/eyeblink/models/model.json';
+var eyeblink_2 = require("./eyeblink");
+exports.Eyeblink = eyeblink_2.Eyeblink;
+var image_1 = require("./utils/image");
+exports.getImageData = image_1.getImageData;
+const defaultGraphModelPath = 'https://prism-3d.github.io/eyeblink/models/model.json';
+async function loadModel(graphModelPath = defaultGraphModelPath) {
+    return tfjs_converter_1.loadGraphModel(graphModelPath);
+}
+exports.loadModel = loadModel;
 async function load(graphModelPath = defaultGraphModelPath) {
-    const blinkModel = await tf.loadGraphModel(graphModelPath);
-    const facemeshModel = await facemesh.load({ maxFaces: 1 });
+    const blinkModel = await loadModel(graphModelPath);
+    const facemeshModel = await facemesh_1.load({ maxFaces: 1 });
     return new eyeblink_1.Eyeblink(blinkModel, facemeshModel);
 }
 exports.load = load;

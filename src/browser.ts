@@ -1,14 +1,25 @@
-import * as tf from '@tensorflow/tfjs-converter';
-import * as facemesh from '@tensorflow-models/facemesh';
+import {loadGraphModel} from '@tensorflow/tfjs-converter';
+import {load as loadFaceMeshModel} from '@tensorflow-models/facemesh';
+import {io} from '@tensorflow/tfjs';
 
 import {Eyeblink} from './eyeblink';
 
+export {Eyeblink, EyeblinkPrediction, BoundingBox} from './eyeblink';
+export {getImageData} from './utils/image';
+
 const defaultGraphModelPath =
-  'https://unpkg.com/@prism-3d/eyeblink/models/model.json';
+  'https://prism-3d.github.io/eyeblink/models/model.json';
 
-export async function load(graphModelPath: string = defaultGraphModelPath) {
-  const blinkModel = await tf.loadGraphModel(graphModelPath);
-  const facemeshModel = await facemesh.load({maxFaces: 1});
+export async function loadModel(
+  graphModelPath: string | io.IOHandler = defaultGraphModelPath,
+) {
+  return loadGraphModel(graphModelPath);
+}
 
+export async function load(
+  graphModelPath: string | io.IOHandler = defaultGraphModelPath,
+) {
+  const blinkModel = await loadModel(graphModelPath);
+  const facemeshModel = await loadFaceMeshModel({maxFaces: 1});
   return new Eyeblink(blinkModel, facemeshModel);
 }

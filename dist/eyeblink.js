@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tf = require("@tensorflow/tfjs");
+const tf = require("@tensorflow/tfjs-core");
 class Eyeblink {
     constructor(eyeblinkModel, facemeshModel) {
         this.eyeblinkModel = eyeblinkModel;
@@ -15,41 +15,44 @@ class Eyeblink {
         const bottomRight = [eyeRightX, eyeBottomY];
         return { topLeft, bottomRight };
     }
-    async getPredictionWithinBoundingBox(input, boundingBox) {
-        const image = tf.tidy(() => {
-            if (!(input instanceof tf.Tensor)) {
-                input = tf.browser.fromPixels(input);
-            }
-            return input.toFloat().expandDims(0);
+    async getPredictionWithinBoundingBox(input, boundingBoxes) {
+        const boundingBoxesNormalized = boundingBoxes.map((box) => {
+            return [
+                box.topLeft[1] / input.shape[0],
+                box.topLeft[0] / input.shape[1],
+                box.bottomRight[1] / input.shape[0],
+                box.bottomRight[0] / input.shape[1],
+            ];
         });
         const cropped = tf.image
-            .cropAndResize(image, [
-            [
-                boundingBox.topLeft[1] / 200,
-                boundingBox.topLeft[0] / 200,
-                boundingBox.bottomRight[1] / 200,
-                boundingBox.bottomRight[0] / 200,
-            ],
-        ], [0], [26, 34])
-            .squeeze([0]);
-        const grayscale = cropped.mean(2).expandDims(2);
-        const inputImage = grayscale.expandDims(0).toFloat().div(255);
+            .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
+            .toFloat();
+        const grayscale = cropped.mean(3).expandDims(3);
+        const inputImage = grayscale.toFloat().div(255);
         const prediction = await this.eyeblinkModel.predict(inputImage).data();
-        return prediction[0];
+        return prediction;
     }
-    async predictEyeOpenness(image) {
-        const facePredictions = await this.facemeshModel.estimateFaces(image);
-        if (facePredictions.length === 0)
-            return null;
-        const face = facePredictions[0];
-        const imageTensor = tf.browser.fromPixels(image);
+    async predictEyeOpenness(image, face) {
+        if (!(image instanceof tf.Tensor)) {
+            const tensor = tf.browser.fromPixels(image);
+            const result = await this.predictEyeOpenness(tensor, face);
+            tensor.dispose();
+            return result;
+        }
+        if (!face) {
+            const facePredictions = await this.facemeshModel.estimateFaces(image);
+            if (facePredictions.length === 0)
+                return null;
+            face = facePredictions[0];
+        }
         const rightEyeMeshIdx = [27, 243, 23, 130];
         const leftEyeMeshIdx = [257, 359, 253, 362];
         const rightEyeBB = this.extractEyeBoundingBox(face, rightEyeMeshIdx);
         const leftEyeBB = this.extractEyeBoundingBox(face, leftEyeMeshIdx);
-        const rightEyePred = await this.getPredictionWithinBoundingBox(imageTensor, rightEyeBB);
-        const leftEyePred = await this.getPredictionWithinBoundingBox(imageTensor, leftEyeBB);
-        imageTensor.dispose();
+        const [leftEyePred, rightEyePred,] = await this.getPredictionWithinBoundingBox(image, [
+            leftEyeBB,
+            rightEyeBB,
+        ]);
         return { right: rightEyePred, left: leftEyePred };
     }
 }

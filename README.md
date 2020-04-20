@@ -32,7 +32,7 @@ Load tf.js Model from URL and use Tensorflow.js to predict.
 > Run `yarn add @tensorflow/tfjs`
 
 ```js
-import * as eyeblinkModel from '@prism-3d/eyeblink/dist/browser';
+import * as eyeblinkModel from '@prism-3d/eyeblink/dist/umd/eyeblink';
 const model = await eyeblinkModel.load('https://path/to/tfjs-model');
 ```
 
