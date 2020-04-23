@@ -45,15 +45,24 @@ class Eyeblink {
                 return null;
             face = facePredictions[0];
         }
+        if (face.faceInViewConfidence < 0.5) {
+            return {
+                right: { openness: 1, likelihood: 0 },
+                left: { openness: 1, likelihood: 0 },
+            };
+        }
         const rightEyeMeshIdx = [27, 243, 23, 130];
         const leftEyeMeshIdx = [257, 359, 253, 362];
         const rightEyeBB = this.extractEyeBoundingBox(face, rightEyeMeshIdx);
         const leftEyeBB = this.extractEyeBoundingBox(face, leftEyeMeshIdx);
-        const [leftEyePred, rightEyePred,] = await this.getPredictionWithinBoundingBox(image, [
-            leftEyeBB,
+        const preds = await this.getPredictionWithinBoundingBox(image, [
             rightEyeBB,
+            leftEyeBB,
         ]);
-        return { right: rightEyePred, left: leftEyePred };
+        return {
+            right: { openness: preds[0], likelihood: preds[1] },
+            left: { openness: preds[2], likelihood: preds[3] },
+        };
     }
 }
 exports.Eyeblink = Eyeblink;

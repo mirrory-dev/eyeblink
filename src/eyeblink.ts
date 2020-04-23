@@ -7,9 +7,14 @@ export interface BoundingBox {
   bottomRight: readonly [number, number];
 }
 
+export interface EyeState {
+  openness: number;
+  likelihood: number;
+}
+
 export interface EyeblinkPrediction {
-  right: number;
-  left: number;
+  right: EyeState;
+  left: EyeState;
 }
 
 export class Eyeblink {
@@ -60,6 +65,7 @@ export class Eyeblink {
     const prediction = await (this.eyeblinkModel.predict(
       inputImage,
     ) as tf.Tensor).data();
+
     return prediction;
   }
 
@@ -85,18 +91,25 @@ export class Eyeblink {
       face = facePredictions[0];
     }
 
+    if (face.faceInViewConfidence < 0.5) {
+      return {
+        right: {openness: 1, likelihood: 0},
+        left: {openness: 1, likelihood: 0},
+      };
+    }
+
     const rightEyeMeshIdx = [27, 243, 23, 130] as const;
     const leftEyeMeshIdx = [257, 359, 253, 362] as const;
     const rightEyeBB = this.extractEyeBoundingBox(face, rightEyeMeshIdx);
     const leftEyeBB = this.extractEyeBoundingBox(face, leftEyeMeshIdx);
-    const [
-      leftEyePred,
-      rightEyePred,
-    ] = await this.getPredictionWithinBoundingBox(image, [
-      leftEyeBB,
+    const preds = await this.getPredictionWithinBoundingBox(image, [
       rightEyeBB,
+      leftEyeBB,
     ]);
 
-    return {right: rightEyePred, left: leftEyePred};
+    return {
+      right: {openness: preds[0], likelihood: preds[1]},
+      left: {openness: preds[2], likelihood: preds[3]},
+    };
   }
 }

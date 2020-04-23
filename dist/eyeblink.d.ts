@@ -5,9 +5,13 @@ export interface BoundingBox {
     topLeft: readonly [number, number];
     bottomRight: readonly [number, number];
 }
+export interface EyeState {
+    openness: number;
+    likelihood: number;
+}
 export interface EyeblinkPrediction {
-    right: number;
-    left: number;
+    right: EyeState;
+    left: EyeState;
 }
 export declare class Eyeblink {
     private eyeblinkModel;

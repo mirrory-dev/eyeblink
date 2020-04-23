@@ -45,10 +45,10 @@ async function animate() {
     const image = getImageData(webcamEl);
     const openness = await predictor.predictEyeOpenness(image);
     if (!openness) return;
-    console.log(openness);
-    rightEyeEl.style.height = `${openness.right * 200}px`;
-    leftEyeEl.style.height = `${openness.left * 200}px`;
-    textEl.innerHTML = `left: ${openness.left}, right: ${openness.right}`;
+    console.log(openness.right, openness.left);
+    rightEyeEl.style.height = `${openness.right.openness * 200}px`;
+    leftEyeEl.style.height = `${openness.left.openness * 200}px`;
+    textEl.innerHTML = `left: ${openness.left.openness} (${openness.left.likelihood}), right: ${openness.right.openness} (${openness.right.likelihood})`;
   }
 }
 

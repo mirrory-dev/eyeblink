@@ -6,9 +6,13 @@ interface BoundingBox {
     topLeft: readonly [number, number];
     bottomRight: readonly [number, number];
 }
+interface EyeState {
+    openness: number;
+    likelihood: number;
+}
 interface EyeblinkPrediction {
-    right: number;
-    left: number;
+    right: EyeState;
+    left: EyeState;
 }
 declare class Eyeblink {
     private eyeblinkModel;

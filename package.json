@@ -5,7 +5,7 @@
   "scripts": {
     "bootstrap": "yarn link && yarn --cwd demo bootstrap",
     "build": "shx rm -rf dist && tsc && rollup -c",
-    "ship:demo": "cd demo && yarn ship"
+    "ship:demo": "yarn build && cd demo && yarn ship"
   },
   "dependencies": {
     "@tensorflow-models/facemesh": "^0.0.1"
