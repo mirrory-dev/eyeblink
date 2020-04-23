@@ -4,7 +4,7 @@ Eyeblink is an eye-blink tracking model that consumes a cropped image of eyes an
 
 Demo: <https://prism-3d.github.io/eyeblink/>
 
-The original model is [Taehee Lee's Eye Blink Detector](https://github.com/kairess/eye_blink_detector).
+This is based on [Taehee Lee's Eye Blink Detector](https://github.com/kairess/eye_blink_detector).
 
 ## Usage
 
@@ -39,9 +39,12 @@ const model = await eyeblinkModel.load('https://path/to/tfjs-model');
 ## Dev
 
 ```
+./build.sh
+
 yarn install
 yarn bootstrap
 yarn link
+
 cd demo
 yarn install
 yarn start
