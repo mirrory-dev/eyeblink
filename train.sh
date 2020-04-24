@@ -2,4 +2,3 @@
 
 cd train
 ./train.sh
-cp ./models/tfjs/* ../models/

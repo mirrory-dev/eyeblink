@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
-import * as blinkModel from '@prism-3d/eyeblink/dist/umd/eyeblink';
-import {Eyeblink} from '@prism-3d/eyeblink/dist/umd/eyeblink';
+import * as blinkModel from '@vanityxr/eyeblink/dist/umd/eyeblink';
+import {Eyeblink} from '@vanityxr/eyeblink/dist/umd/eyeblink';
 
 let predictor: Eyeblink;
 let webcam: any;
@@ -46,9 +46,9 @@ async function animate() {
     const openness = await predictor.predictEyeOpenness(image);
     if (!openness) return;
     console.log(openness.right, openness.left);
-    rightEyeEl.style.height = `${openness.right.openness * 200}px`;
-    leftEyeEl.style.height = `${openness.left.openness * 200}px`;
-    textEl.innerHTML = `left: ${openness.left.openness} (${openness.left.likelihood}), right: ${openness.right.openness} (${openness.right.likelihood})`;
+    rightEyeEl.style.height = `${openness.right * 200}px`;
+    leftEyeEl.style.height = `${openness.left * 200}px`;
+    textEl.innerHTML = `left: ${openness.left}, right: ${openness.right}`;
   }
 }
 

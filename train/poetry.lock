@@ -448,7 +448,7 @@ description = "The JupyterLab notebook server extension."
 name = "jupyterlab"
 optional = false
 python-versions = ">=3.5"
-version = "2.1.0"
+version = "2.1.1"
 
 [package.dependencies]
 jinja2 = ">=2.10"
@@ -1537,8 +1537,8 @@ jupyter-core = [
     {file = "jupyter_core-4.6.3.tar.gz", hash = "sha256:394fd5dd787e7c8861741880bdf8a00ce39f95de5d18e579c74b882522219e7e"},
 ]
 jupyterlab = [
-    {file = "jupyterlab-2.1.0-py3-none-any.whl", hash = "sha256:6663eed77b10d567499ab998eb71dabb510572f7337ec8efc48ed56cd37f9c5f"},
-    {file = "jupyterlab-2.1.0.tar.gz", hash = "sha256:8c239aababf5baa0b3d36e375fddeb9fd96f3a9a24a8cda098d6a414f5bbdc81"},
+    {file = "jupyterlab-2.1.1-py3-none-any.whl", hash = "sha256:36948d2a42376e186cb5358076d0c3c49b98dfed006c99d0c98561d0e491c4fa"},
+    {file = "jupyterlab-2.1.1.tar.gz", hash = "sha256:2dec7e509ffa3892c67d9ac7c89d7c6a860c151d969d89420d9e20e753b2fb29"},
 ]
 jupyterlab-server = [
     {file = "jupyterlab_server-1.1.1-py3-none-any.whl", hash = "sha256:f678a77fa74eeec80c15d6c9884f6ff050f5473267bd342944164115768ec759"},

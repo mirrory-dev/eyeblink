@@ -8,3 +8,4 @@ tensorflowjs_converter \
    --quantization_bytes 2 \
    ${ROOT}/models/latest.h5 \
    ${ROOT}/models/tfjs
+cp ./models/tfjs/* ../models/

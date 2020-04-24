@@ -15,21 +15,21 @@ base_path = 'dataset'
 X, y = read_csv(os.path.join(base_path, 'dataset.csv'))
 
 # Add likelihood 1.0
-y = np.hstack((y, np.ones((y.shape[0], 1))))
+# y = np.hstack((y, np.ones((y.shape[0], 1))))
 
 print(X.shape, y.shape)
 
 # %% Add false dataset
 
-dummy_num = 500
-fX = np.maximum(0.0, np.expm1(np.random.normal(3, 0.75, (dummy_num, 26, 34, 1)))).astype('uint8')
+# dummy_num = 500
+# fX = np.maximum(0.0, np.expm1(np.random.normal(3, 0.75, (dummy_num, 26, 34, 1)))).astype('uint8')
 
-fy = np.zeros((dummy_num, 2))
-fy[:, 0] = (np.random.rand(dummy_num) > 0.5).astype('uint8')
+# fy = np.zeros((dummy_num, 2))
+# fy[:, 0] = (np.random.rand(dummy_num) > 0.5).astype('uint8')
 
-X = np.vstack((X, fX))
-y = np.vstack((y, fy))
-print(X.shape, y.shape)
+# X = np.vstack((X, fX))
+# y = np.vstack((y, fy))
+# print(X.shape, y.shape)
 # print(fX[0])
 # import matplotlib.pyplot as plt
 # plt.imshow(fX[0].squeeze(2))

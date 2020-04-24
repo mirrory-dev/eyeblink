@@ -7,7 +7,7 @@ var eyeblink_2 = require("./eyeblink");
 exports.Eyeblink = eyeblink_2.Eyeblink;
 var image_1 = require("./utils/image");
 exports.getImageData = image_1.getImageData;
-const defaultGraphModelPath = 'https://prism-3d.github.io/eyeblink/models/model.json';
+const defaultGraphModelPath = 'https://VanityXR.github.io/eyeblink/models/model.json';
 async function loadModel(graphModelPath = defaultGraphModelPath) {
     return tfjs_converter_1.loadGraphModel(graphModelPath);
 }

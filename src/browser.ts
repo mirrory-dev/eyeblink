@@ -8,7 +8,7 @@ export {Eyeblink, EyeblinkPrediction, BoundingBox} from './eyeblink';
 export {getImageData} from './utils/image';
 
 const defaultGraphModelPath =
-  'https://prism-3d.github.io/eyeblink/models/model.json';
+  'https://VanityXR.github.io/eyeblink/models/model.json';
 
 export async function loadModel(
   graphModelPath: string | io.IOHandler = defaultGraphModelPath,

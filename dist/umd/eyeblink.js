@@ -82,24 +82,15 @@
                     return null;
                 face = facePredictions[0];
             }
-            if (face.faceInViewConfidence < 0.5) {
-                return {
-                    right: { openness: 1, likelihood: 0 },
-                    left: { openness: 1, likelihood: 0 },
-                };
-            }
             const rightEyeMeshIdx = [27, 243, 23, 130];
             const leftEyeMeshIdx = [257, 359, 253, 362];
             const rightEyeBB = this.extractEyeBoundingBox(face, rightEyeMeshIdx);
             const leftEyeBB = this.extractEyeBoundingBox(face, leftEyeMeshIdx);
-            const preds = await this.getPredictionWithinBoundingBox(image, [
+            const [rightEyePred, leftEyePred,] = await this.getPredictionWithinBoundingBox(image, [
                 rightEyeBB,
                 leftEyeBB,
             ]);
-            return {
-                right: { openness: preds[0], likelihood: preds[1] },
-                left: { openness: preds[2], likelihood: preds[3] },
-            };
+            return { right: rightEyePred, left: leftEyePred };
         }
     }
 
@@ -113,7 +104,7 @@
         return image;
     }
 
-    const defaultGraphModelPath = 'https://prism-3d.github.io/eyeblink/models/model.json';
+    const defaultGraphModelPath = 'https://VanityXR.github.io/eyeblink/models/model.json';
     async function loadModel(graphModelPath = defaultGraphModelPath) {
         return tfjsConverter.loadGraphModel(graphModelPath);
     }

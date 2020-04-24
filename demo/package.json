@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "author": "Yasuaki Uechi <y@uechi.io> (https://uechi.io/)",
   "scripts": {
-    "bootstrap": "yarn link @prism-3d/eyeblink",
+    "bootstrap": "yarn link @vanityxr/eyeblink",
     "build": "yarn clean && yarn copyAssets && yarn build:js",
     "build:js": "parcel build index.ts -o dist/bundle.js",
     "clean": "shx rm -rf dist",
@@ -14,8 +14,8 @@
     "watch:static": "serve dist"
   },
   "dependencies": {
-    "@prism-3d/eyeblink": "https://github.com/prism-3d/eyeblink",
-    "@tensorflow/tfjs": "^1.7.2"
+    "@tensorflow/tfjs": "^1.7.2",
+    "@vanityxr/eyeblink": "https://github.com/VanityXR/eyeblink"
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",

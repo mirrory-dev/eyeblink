@@ -63,7 +63,7 @@ net = Flatten()(net)
 
 net = Dense(512)(net)
 net = Activation('relu')(net)
-net = Dense(2)(net)
+net = Dense(1)(net)
 outputs = Activation('sigmoid')(net)
 
 model = Model(inputs=inputs, outputs=outputs)
@@ -93,17 +93,17 @@ shutil.copyfile(model_file, 'models/latest.h5')
 
 # %% Confusion Matrix
 
-model = load_model(model_file)
+# model = load_model(model_file)
 
-y_pred = model.predict(x_val / 255.)
-y_pred_logical = (y_pred[:, 0] > 0.5).astype(np.int)
-print(y_val.shape)
-print('test acc: %s' % accuracy_score(y_val[:, 0], y_pred_logical))
-cm = confusion_matrix(y_val[:, 0], y_pred_logical)
-sns.heatmap(cm, annot=True)
+# y_pred = model.predict(x_val / 255.)
+# y_pred_logical = (y_pred[:, 0] > 0.5).astype(np.int)
+# print(y_val.shape)
+# print('test acc: %s' % accuracy_score(y_val[:, 0], y_pred_logical))
+# cm = confusion_matrix(y_val[:, 0], y_pred_logical)
+# sns.heatmap(cm, annot=True)
 
-# Distribution of Prediction
+# # Distribution of Prediction
 
-ax = sns.distplot(y_pred[:, 0], kde=False)
+# ax = sns.distplot(y_pred[:, 0], kde=False)
 
 # %%

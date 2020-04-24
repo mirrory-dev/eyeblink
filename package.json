@@ -1,5 +1,5 @@
 {
-  "name": "@prism-3d/eyeblink",
+  "name": "@vanityxr/eyeblink",
   "version": "1.0.0",
   "author": "Yasuaki Uechi <y@uechi.io> (https://uechi.io/)",
   "scripts": {
@@ -34,6 +34,9 @@
     "dist",
     "models"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
   "browserslist": [
     "last 1 Chrome versions"
