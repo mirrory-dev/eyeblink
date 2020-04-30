@@ -34,7 +34,7 @@ export class Eyeblink {
     return {topLeft, bottomRight};
   }
 
-  private async getPredictionWithinBoundingBox(
+  async getPredictionWithinBoundingBox(
     input: tf.Tensor3D,
     boundingBoxes: BoundingBox[],
   ) {
