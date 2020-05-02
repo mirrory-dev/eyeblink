@@ -14,6 +14,6 @@ export declare class Eyeblink {
     private facemeshModel;
     constructor(eyeblinkModel: GraphModel, facemeshModel: FaceMesh);
     private extractEyeBoundingBox;
-    private getPredictionWithinBoundingBox;
+    getPredictionWithinBoundingBox(input: tf.Tensor3D, boundingBoxes: BoundingBox[]): Promise<tf.backend_util.TypedArray>;
     predictEyeOpenness(image: tf.Tensor3D | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, face?: AnnotatedPrediction): Promise<EyeblinkPrediction | null>;
 }
