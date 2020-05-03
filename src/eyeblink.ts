@@ -12,18 +12,22 @@ export interface EyeblinkPrediction {
   left: number;
 }
 
-function equalizeHist<R extends tf.Rank>(image: tf.Tensor<R>) {
-  let max = 0
-  let min = 1
-  const data = image.dataSync()
-  for (let i = 0; i < data.length; ++i) {
-    max = Math.max(max, data[i])
-    min = Math.min(min, data[i])
+function equalizeHist(images: tf.Tensor4D) {
+  const data = images.dataSync()
+  for (let i = 0; i < images.shape[0]; ++i) {
+    let max = 0
+    let min = 1
+    for (let j = 0; j < images.strides[0]; ++j) {
+      let index = i * images.strides[0] + j
+      max = Math.max(max, data[index])
+      min = Math.min(min, data[index])
+    }
+    for (let j = 0; j < images.strides[0]; ++j) {
+      let index = i * images.strides[0] + j
+      data[index] = (data[index] - min) / (max - min)
+    }
   }
-  for (let i = 0; i < data.length; ++i) {
-    data[i] = (data[i] - min) / (max - min)
-  }
-  return tf.tensor1d(data).reshape(image.shape)
+  return tf.tensor1d(data).reshape(images.shape)
 }
 
 export class Eyeblink {
