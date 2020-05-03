@@ -53,21 +53,25 @@
             return { topLeft, bottomRight };
         }
         async getPredictionWithinBoundingBox(input, boundingBoxes) {
-            const boundingBoxesNormalized = boundingBoxes.map((box) => {
-                return [
-                    box.topLeft[1] / input.shape[0],
-                    box.topLeft[0] / input.shape[1],
-                    box.bottomRight[1] / input.shape[0],
-                    box.bottomRight[0] / input.shape[1],
-                ];
+            const prediction = tf.tidy(() => {
+                const boundingBoxesNormalized = boundingBoxes.map((box) => {
+                    return [
+                        box.topLeft[1] / input.shape[0],
+                        box.topLeft[0] / input.shape[1],
+                        box.bottomRight[1] / input.shape[0],
+                        box.bottomRight[0] / input.shape[1],
+                    ];
+                });
+                const cropped = tf.image
+                    .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
+                    .toFloat();
+                const grayscale = cropped.mean(3).expandDims(3);
+                const inputImage = grayscale.toFloat().div(255);
+                return this.eyeblinkModel.predict(inputImage);
             });
-            const cropped = tf.image
-                .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
-                .toFloat();
-            const grayscale = cropped.mean(3).expandDims(3);
-            const inputImage = grayscale.toFloat().div(255);
-            const prediction = await this.eyeblinkModel.predict(inputImage).data();
-            return prediction;
+            const result = await prediction.data();
+            prediction.dispose();
+            return result;
         }
         async predictEyeOpenness(image, face) {
             if (!(image instanceof tf.Tensor)) {
