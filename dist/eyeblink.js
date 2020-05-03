@@ -1,6 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tf = require("@tensorflow/tfjs-core");
+function equalizeHist(image) {
+    let max = 0;
+    let min = 1;
+    const data = image.dataSync();
+    for (let i = 0; i < data.length; ++i) {
+        max = Math.max(max, data[i]);
+        min = Math.min(min, data[i]);
+    }
+    for (let i = 0; i < data.length; ++i) {
+        data[i] = (data[i] - min) / (max - min);
+    }
+    return tf.tensor1d(data).reshape(image.shape);
+}
 class Eyeblink {
     constructor(eyeblinkModel, facemeshModel) {
         this.eyeblinkModel = eyeblinkModel;
@@ -29,7 +42,7 @@ class Eyeblink {
                 .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
                 .toFloat();
             const grayscale = cropped.mean(3).expandDims(3);
-            const inputImage = grayscale.toFloat().div(255);
+            const inputImage = equalizeHist(grayscale.toFloat().div(255));
             return this.eyeblinkModel.predict(inputImage);
         });
         const result = await prediction.data();

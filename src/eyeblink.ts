@@ -12,6 +12,20 @@ export interface EyeblinkPrediction {
   left: number;
 }
 
+function equalizeHist<R extends tf.Rank>(image: tf.Tensor<R>) {
+  let max = 0
+  let min = 1
+  const data = image.dataSync()
+  for (let i = 0; i < data.length; ++i) {
+    max = Math.max(max, data[i])
+    min = Math.min(min, data[i])
+  }
+  for (let i = 0; i < data.length; ++i) {
+    data[i] = (data[i] - min) / (max - min)
+  }
+  return tf.tensor1d(data).reshape(image.shape)
+}
+
 export class Eyeblink {
   private eyeblinkModel: GraphModel;
   private facemeshModel: FaceMesh;
@@ -57,7 +71,8 @@ export class Eyeblink {
         )
         .toFloat();
       const grayscale = cropped.mean(3).expandDims(3);
-      const inputImage = grayscale.toFloat().div(255);
+      const inputImage = equalizeHist(grayscale.toFloat().div(255));
+      //const inputImage = grayscale.toFloat().div(255);
       return this.eyeblinkModel.predict(
         inputImage,
       ) as tf.Tensor
