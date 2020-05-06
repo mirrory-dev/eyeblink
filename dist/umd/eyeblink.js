@@ -70,23 +70,25 @@
             return { topLeft, bottomRight };
         }
         async getPredictionWithinBoundingBox(input, boundingBoxes) {
-            tf.engine().startScope();
-            const boundingBoxesNormalized = boundingBoxes.map((box) => {
-                return [
-                    box.topLeft[1] / input.shape[0],
-                    box.topLeft[0] / input.shape[1],
-                    box.bottomRight[1] / input.shape[0],
-                    box.bottomRight[0] / input.shape[1],
-                ];
+            const grayscale = tf.tidy(() => {
+                const boundingBoxesNormalized = boundingBoxes.map((box) => {
+                    return [
+                        box.topLeft[1] / input.shape[0],
+                        box.topLeft[0] / input.shape[1],
+                        box.bottomRight[1] / input.shape[0],
+                        box.bottomRight[0] / input.shape[1],
+                    ];
+                });
+                const cropped = tf.image
+                    .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
+                    .toFloat();
+                return cropped.mean(3).expandDims(3).toFloat().div(255);
             });
-            const cropped = tf.image
-                .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
-                .toFloat();
-            const grayscale = cropped.mean(3).expandDims(3);
-            const inputImage = await equalizeHist(grayscale.toFloat().div(255));
-            const prediction = this.eyeblinkModel.predict(inputImage);
+            const grayscaleEqualized = await equalizeHist(grayscale);
+            const prediction = this.eyeblinkModel.predict(grayscaleEqualized);
             const result = await prediction.data();
-            tf.engine().endScope();
+            grayscaleEqualized.dispose();
+            prediction.dispose();
             return result;
         }
         async predictEyeOpenness(image, face) {
