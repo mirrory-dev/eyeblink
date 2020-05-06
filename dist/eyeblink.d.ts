@@ -1,6 +1,6 @@
-import * as tf from '@tensorflow/tfjs-core';
-import { GraphModel } from '@tensorflow/tfjs-converter';
-import { FaceMesh, AnnotatedPrediction } from '@tensorflow-models/facemesh';
+import * as tf from "@tensorflow/tfjs-core";
+import { GraphModel } from "@tensorflow/tfjs-converter";
+import { FaceMesh, AnnotatedPrediction } from "@tensorflow-models/facemesh";
 export interface BoundingBox {
     topLeft: readonly [number, number];
     bottomRight: readonly [number, number];
@@ -14,6 +14,6 @@ export declare class Eyeblink {
     private facemeshModel;
     constructor(eyeblinkModel: GraphModel, facemeshModel: FaceMesh);
     private extractEyeBoundingBox;
-    getPredictionWithinBoundingBox(input: tf.Tensor3D, boundingBoxes: BoundingBox[]): Promise<tf.backend_util.TypedArray>;
+    getPredictionWithinBoundingBox(input: tf.Tensor3D, boundingBoxes: BoundingBox[]): Promise<Float32Array | Int32Array | Uint8Array>;
     predictEyeOpenness(image: tf.Tensor3D | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, face?: AnnotatedPrediction): Promise<EyeblinkPrediction | null>;
 }

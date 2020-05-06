@@ -1,6 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tf = require("@tensorflow/tfjs-core");
+async function equalizeHist(images) {
+    const data = await images.data();
+    for (let i = 0; i < images.shape[0]; ++i) {
+        let max = 0;
+        let min = 1;
+        for (let j = 0; j < images.strides[0]; ++j) {
+            let index = i * images.strides[0] + j;
+            max = Math.max(max, data[index]);
+            min = Math.min(min, data[index]);
+        }
+        for (let j = 0; j < images.strides[0]; ++j) {
+            let index = i * images.strides[0] + j;
+            data[index] = (data[index] - min) / (max - min);
+        }
+    }
+    return tf.tensor1d(data).reshape(images.shape);
+}
 class Eyeblink {
     constructor(eyeblinkModel, facemeshModel) {
         this.eyeblinkModel = eyeblinkModel;
@@ -16,7 +33,7 @@ class Eyeblink {
         return { topLeft, bottomRight };
     }
     async getPredictionWithinBoundingBox(input, boundingBoxes) {
-        const prediction = tf.tidy(() => {
+        const grayscale = tf.tidy(() => {
             const boundingBoxesNormalized = boundingBoxes.map((box) => {
                 return [
                     box.topLeft[1] / input.shape[0],
@@ -28,11 +45,12 @@ class Eyeblink {
             const cropped = tf.image
                 .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
                 .toFloat();
-            const grayscale = cropped.mean(3).expandDims(3);
-            const inputImage = grayscale.toFloat().div(255);
-            return this.eyeblinkModel.predict(inputImage);
+            return cropped.mean(3).expandDims(3).toFloat().div(255);
         });
+        const grayscaleEqualized = await equalizeHist(grayscale);
+        const prediction = this.eyeblinkModel.predict(grayscaleEqualized);
         const result = await prediction.data();
+        grayscaleEqualized.dispose();
         prediction.dispose();
         return result;
     }
