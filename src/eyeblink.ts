@@ -1,6 +1,6 @@
-import * as tf from '@tensorflow/tfjs-core';
-import {GraphModel} from '@tensorflow/tfjs-converter';
-import {FaceMesh, AnnotatedPrediction} from '@tensorflow-models/facemesh';
+import * as tf from "@tensorflow/tfjs-core";
+import { GraphModel } from "@tensorflow/tfjs-converter";
+import { FaceMesh, AnnotatedPrediction } from "@tensorflow-models/facemesh";
 
 export interface BoundingBox {
   topLeft: readonly [number, number];
@@ -12,22 +12,22 @@ export interface EyeblinkPrediction {
   left: number;
 }
 
-function equalizeHist(images: tf.Tensor4D) {
-  const data = images.dataSync()
+async function equalizeHist(images: tf.Tensor4D) {
+  const data = await images.data();
   for (let i = 0; i < images.shape[0]; ++i) {
-    let max = 0
-    let min = 1
+    let max = 0;
+    let min = 1;
     for (let j = 0; j < images.strides[0]; ++j) {
-      let index = i * images.strides[0] + j
-      max = Math.max(max, data[index])
-      min = Math.min(min, data[index])
+      let index = i * images.strides[0] + j;
+      max = Math.max(max, data[index]);
+      min = Math.min(min, data[index]);
     }
     for (let j = 0; j < images.strides[0]; ++j) {
-      let index = i * images.strides[0] + j
-      data[index] = (data[index] - min) / (max - min)
+      let index = i * images.strides[0] + j;
+      data[index] = (data[index] - min) / (max - min);
     }
   }
-  return tf.tensor1d(data).reshape(images.shape)
+  return tf.tensor1d(data).reshape(images.shape);
 }
 
 export class Eyeblink {
@@ -41,7 +41,7 @@ export class Eyeblink {
 
   private extractEyeBoundingBox(
     face: AnnotatedPrediction,
-    [top, right, bottom, left]: readonly [number, number, number, number],
+    [top, right, bottom, left]: readonly [number, number, number, number]
   ): BoundingBox {
     const eyeTopY = (face.scaledMesh as any)[top][1] as number;
     const eyeRightX = (face.scaledMesh as any)[right][0] as number;
@@ -49,40 +49,39 @@ export class Eyeblink {
     const eyeLeftX = (face.scaledMesh as any)[left][0] as number;
     const topLeft = [eyeLeftX, eyeTopY] as const;
     const bottomRight = [eyeRightX, eyeBottomY] as const;
-    return {topLeft, bottomRight};
+    return { topLeft, bottomRight };
   }
 
   async getPredictionWithinBoundingBox(
     input: tf.Tensor3D,
-    boundingBoxes: BoundingBox[],
+    boundingBoxes: BoundingBox[]
   ) {
-    const prediction = tf.tidy(() => {
-      const boundingBoxesNormalized = boundingBoxes.map((box) => {
-        return [
-          box.topLeft[1] / input.shape[0],
-          box.topLeft[0] / input.shape[1],
-          box.bottomRight[1] / input.shape[0],
-          box.bottomRight[0] / input.shape[1],
-        ];
-      });
+    tf.engine().startScope();
 
-      const cropped = tf.image
-        .cropAndResize(
-          input.expandDims(0),
-          boundingBoxesNormalized,
-          boundingBoxesNormalized.map(() => 0),
-          [26, 34],
-        )
-        .toFloat();
-      const grayscale = cropped.mean(3).expandDims(3);
-      const inputImage = equalizeHist(grayscale.toFloat().div(255));
-      //const inputImage = grayscale.toFloat().div(255);
-      return this.eyeblinkModel.predict(
-        inputImage,
-      ) as tf.Tensor
-    })
+    const boundingBoxesNormalized = boundingBoxes.map((box) => {
+      return [
+        box.topLeft[1] / input.shape[0],
+        box.topLeft[0] / input.shape[1],
+        box.bottomRight[1] / input.shape[0],
+        box.bottomRight[0] / input.shape[1],
+      ];
+    });
+
+    const cropped = tf.image
+      .cropAndResize(
+        input.expandDims(0),
+        boundingBoxesNormalized,
+        boundingBoxesNormalized.map(() => 0),
+        [26, 34]
+      )
+      .toFloat();
+    const grayscale = cropped.mean(3).expandDims(3);
+    const inputImage = await equalizeHist(grayscale.toFloat().div(255));
+    //const inputImage = grayscale.toFloat().div(255);
+    const prediction = this.eyeblinkModel.predict(inputImage) as tf.Tensor;
     const result = await prediction.data();
-    prediction.dispose();
+
+    tf.engine().endScope();
     return result;
   }
 
@@ -93,7 +92,7 @@ export class Eyeblink {
       | HTMLImageElement
       | HTMLCanvasElement
       | HTMLVideoElement,
-    face?: AnnotatedPrediction,
+    face?: AnnotatedPrediction
   ): Promise<EyeblinkPrediction | null> {
     if (!(image instanceof tf.Tensor)) {
       const tensor = tf.browser.fromPixels(image);
@@ -120,6 +119,6 @@ export class Eyeblink {
       leftEyeBB,
     ]);
 
-    return {right: rightEyePred, left: leftEyePred};
+    return { right: rightEyePred, left: leftEyePred };
   }
 }

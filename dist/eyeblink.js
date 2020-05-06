@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tf = require("@tensorflow/tfjs-core");
-function equalizeHist(images) {
-    const data = images.dataSync();
+async function equalizeHist(images) {
+    const data = await images.data();
     for (let i = 0; i < images.shape[0]; ++i) {
         let max = 0;
         let min = 1;
@@ -33,24 +33,23 @@ class Eyeblink {
         return { topLeft, bottomRight };
     }
     async getPredictionWithinBoundingBox(input, boundingBoxes) {
-        const prediction = tf.tidy(() => {
-            const boundingBoxesNormalized = boundingBoxes.map((box) => {
-                return [
-                    box.topLeft[1] / input.shape[0],
-                    box.topLeft[0] / input.shape[1],
-                    box.bottomRight[1] / input.shape[0],
-                    box.bottomRight[0] / input.shape[1],
-                ];
-            });
-            const cropped = tf.image
-                .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
-                .toFloat();
-            const grayscale = cropped.mean(3).expandDims(3);
-            const inputImage = equalizeHist(grayscale.toFloat().div(255));
-            return this.eyeblinkModel.predict(inputImage);
+        tf.engine().startScope();
+        const boundingBoxesNormalized = boundingBoxes.map((box) => {
+            return [
+                box.topLeft[1] / input.shape[0],
+                box.topLeft[0] / input.shape[1],
+                box.bottomRight[1] / input.shape[0],
+                box.bottomRight[0] / input.shape[1],
+            ];
         });
+        const cropped = tf.image
+            .cropAndResize(input.expandDims(0), boundingBoxesNormalized, boundingBoxesNormalized.map(() => 0), [26, 34])
+            .toFloat();
+        const grayscale = cropped.mean(3).expandDims(3);
+        const inputImage = await equalizeHist(grayscale.toFloat().div(255));
+        const prediction = this.eyeblinkModel.predict(inputImage);
         const result = await prediction.data();
-        prediction.dispose();
+        tf.engine().endScope();
         return result;
     }
     async predictEyeOpenness(image, face) {

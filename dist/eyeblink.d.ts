@@ -1,6 +1,6 @@
-import * as tf from '@tensorflow/tfjs-core';
-import { GraphModel } from '@tensorflow/tfjs-converter';
-import { FaceMesh, AnnotatedPrediction } from '@tensorflow-models/facemesh';
+import * as tf from "@tensorflow/tfjs-core";
+import { GraphModel } from "@tensorflow/tfjs-converter";
+import { FaceMesh, AnnotatedPrediction } from "@tensorflow-models/facemesh";
 export interface BoundingBox {
     topLeft: readonly [number, number];
     bottomRight: readonly [number, number];
