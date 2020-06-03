@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.load = exports.loadModel = void 0;
 const tfjs_converter_1 = require("@tensorflow/tfjs-converter");
 const facemesh_1 = require("@tensorflow-models/facemesh");
 const path_1 = require("path");

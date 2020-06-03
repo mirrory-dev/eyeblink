@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.load = exports.loadModel = void 0;
 const tfjs_converter_1 = require("@tensorflow/tfjs-converter");
 const facemesh_1 = require("@tensorflow-models/facemesh");
 const eyeblink_1 = require("./eyeblink");
 var eyeblink_2 = require("./eyeblink");
-exports.Eyeblink = eyeblink_2.Eyeblink;
+Object.defineProperty(exports, "Eyeblink", { enumerable: true, get: function () { return eyeblink_2.Eyeblink; } });
 var image_1 = require("./utils/image");
-exports.getImageData = image_1.getImageData;
-const defaultGraphModelPath = 'https://VanityXR.github.io/eyeblink/models/model.json';
+Object.defineProperty(exports, "getImageData", { enumerable: true, get: function () { return image_1.getImageData; } });
+const defaultGraphModelPath = 'https://mirrory-dev.github.io/eyeblink/models/model.json';
 async function loadModel(graphModelPath = defaultGraphModelPath) {
     return tfjs_converter_1.loadGraphModel(graphModelPath);
 }

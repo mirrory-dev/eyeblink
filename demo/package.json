@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "author": "Yasuaki Uechi <y@uechi.io> (https://uechi.io/)",
   "scripts": {
-    "bootstrap": "yarn link @vanityxr/eyeblink",
+    "bootstrap": "yarn link @mirrory/eyeblink",
     "build": "yarn clean && yarn copyAssets && yarn build:js",
     "build:js": "parcel build index.ts -o dist/bundle.js",
     "clean": "shx rm -rf dist",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@tensorflow/tfjs": "^1.7.2",
-    "@vanityxr/eyeblink": "https://github.com/VanityXR/eyeblink"
+    "@mirrory/eyeblink": "https://github.com/mirrory-dev/eyeblink"
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",

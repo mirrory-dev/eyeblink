@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
-import * as blinkModel from '@vanityxr/eyeblink/dist/umd/eyeblink';
-import {Eyeblink} from '@vanityxr/eyeblink/dist/umd/eyeblink';
+import * as blinkModel from '@mirrory/eyeblink/dist/umd/eyeblink';
+import {Eyeblink} from '@mirrory/eyeblink/dist/umd/eyeblink';
 
 let predictor: Eyeblink;
 let webcam: any;

@@ -941,9 +941,9 @@
   resolved "https://registry.yarnpkg.com/@types/webgl2/-/webgl2-0.0.4.tgz#c3b0f9d6b465c66138e84e64cb3bdf8373c2c279"
   integrity sha512-PACt1xdErJbMUOUweSrbVM7gSIYm1vTncW2hF6Os/EeWi6TXYAYMPp+8v6rzHmypE5gHrxaxZNXgMkJVIdZpHw==
 
-"@vanityxr/eyeblink@https://github.com/VanityXR/eyeblink":
+"@mirrory/eyeblink@https://github.com/mirrory-dev/eyeblink":
   version "1.0.0"
-  resolved "https://github.com/VanityXR/eyeblink#c0902fe55888f8aa707aee9aae44d60cab5bddd4"
+  resolved "https://github.com/mirrory-dev/eyeblink#c0902fe55888f8aa707aee9aae44d60cab5bddd4"
   dependencies:
     "@tensorflow-models/facemesh" "^0.0.1"
 

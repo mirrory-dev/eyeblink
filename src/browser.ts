@@ -8,7 +8,7 @@ export {Eyeblink, EyeblinkPrediction, BoundingBox} from './eyeblink';
 export {getImageData} from './utils/image';
 
 const defaultGraphModelPath =
-  'https://VanityXR.github.io/eyeblink/models/model.json';
+  'https://mirrory-dev.github.io/eyeblink/models/model.json';
 
 export async function loadModel(
   graphModelPath: string | io.IOHandler = defaultGraphModelPath,

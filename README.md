@@ -2,14 +2,14 @@
 
 Eyeblink is an eye-blink tracking model that consumes a cropped image of eyes and predicts the eye openness.
 
-Demo: <https://VanityXR.github.io/eyeblink/>
+Demo: <https://mirrory-dev.github.io/eyeblink/>
 
 This is based on [Taehee Lee's Eye Blink Detector](https://github.com/kairess/eye_blink_detector).
 
 ## Usage
 
 ```
-yarn add https://github.com/VanityXR/eyeblink
+yarn add https://github.com/mirrory-dev/eyeblink
 ```
 
 ### Multi-architecture support
@@ -21,7 +21,7 @@ Load tf.js Model from file-system and use Tensorflow C binary to predict.
 > Run `yarn add @tensorflow/tfjs-node`
 
 ```js
-import * as eyeblinkModel from '@vanityxr/eyeblink';
+import * as eyeblinkModel from '@mirrory/eyeblink';
 const model = await eyeblinkModel.load('path/to/tfjs-model');
 ```
 
@@ -32,7 +32,7 @@ Load tf.js Model from URL and use Tensorflow.js to predict.
 > Run `yarn add @tensorflow/tfjs`
 
 ```js
-import * as eyeblinkModel from '@vanityxr/eyeblink/dist/umd/eyeblink';
+import * as eyeblinkModel from '@mirrory/eyeblink/dist/umd/eyeblink';
 const model = await eyeblinkModel.load('https://path/to/tfjs-model');
 ```
 

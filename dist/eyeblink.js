@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Eyeblink = void 0;
 const tf = require("@tensorflow/tfjs-core");
 class Eyeblink {
     constructor(eyeblinkModel, facemeshModel) {

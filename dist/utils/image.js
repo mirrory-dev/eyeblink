@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getImageData = void 0;
 function getImageData(videoEl) {
     const width = videoEl.width;
     const height = videoEl.height;
